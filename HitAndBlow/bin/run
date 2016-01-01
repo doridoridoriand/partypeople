@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+
+$: << File.expand_path(File.join(__FILE__, '..', '..', 'lib'))
+require 'base'
+
+include Base
+
+$number_of_digits = 4
+number_of_retry = 0
+
+puts "#{GAME_START}#{$number_of_digits}#{DISPLAY_STRING}"
+
+digits = GenDigit.new_digits
+
+STDIN.each do |input|
+  number_of_retry += 1
+  hash = {}
+  hash[:input] = input.chomp
+  hash[:answer]  = digits
+  begin
+    input.is_correct
+    result = hash.check_num
+    puts "#{HIT}: #{result[:hits]}個, #{BLOW}: #{result[:blows]}個"
+  if result[:hits] == $number_of_digits
+    puts "おめでとうございます。#{number_of_retry}回目で成功しました！！！"
+    break
+  end
+  rescue => err
+    puts err.msg
+  end
+  puts SPRIT_LINE
+end
